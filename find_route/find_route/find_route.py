@@ -1,16 +1,15 @@
 import sys
 
 class Path(object):
-    def __init__(self, origin, destination, distance):
-        self.origin = origin
+    def __init__(self, destination, distance):
         self.destination = destination
         self.distance = distance
 
     def __repr__(self):
-        return "%s to %s: %d miles" % (self.origin, self.destination, self.distance)
+        return "%s: %d miles" % (self.destination, self.distance)
 
-def load_paths(filename):
-    paths = []
+def load_tree(filename):
+    tree = {}
     with open(filename, "r") as input_file:
         lines =  input_file.readlines()
         for line in lines:
@@ -18,15 +17,17 @@ def load_paths(filename):
                 break;
             else:
                 items = line.split()
-                paths.append(Path(items[0], items[1], int(items[2])))
-            
-    return paths
+                #add path from origin to destination
+                tree.setdefault(items[0],[]).append(Path(items[1], int(items[2])))
+                #add path from destination to origin since it is a two way street
+                tree.setdefault(items[1],[]).append(Path(items[0], int(items[2])))
+
+    return tree
 
 def main(args):
     #load paths into list of paths
-    paths = load_paths(args[1])
-    for path in paths:
-        print path
+    tree = load_tree(args[1])
+    print tree
     #find path given origin and destination
     #print results
     pass
