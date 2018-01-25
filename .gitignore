@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# User-defined files, not needed for github
+*.sln
+*.pyproj
+*.gitattributes
+
 # User-specific files
 *.suo
 *.user
