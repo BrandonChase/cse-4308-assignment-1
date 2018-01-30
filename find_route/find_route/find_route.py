@@ -88,10 +88,11 @@ class RouteFinder(object):
     def load_paths(self, filename):
         """Returns a dictionary representing the paths of the map given the name of a file that is the text representation of the map"""
         paths = {} #paths is a dictionary with the origin city as the key and a list of paths from the origin city as the value
-        with open(filename, "r") as input_file:
+        input_file = open(filename, "r")
+        try:    
             lines =  input_file.readlines()
             for line in lines:
-                if line == "END OF INPUT\n":
+                if "END OF INPUT" in line:
                     break; #don't read past end of file
                 else:
                     items = line.split() #items separated by space
@@ -99,7 +100,8 @@ class RouteFinder(object):
                     paths.setdefault(items[0],[]).append(Path(items[0], items[1], int(items[2]))) #setdefault ensures that if the origin city is not in dictionary yet, initialize its value list before adding the path
                     #add path from destination to origin since it is a two way street
                     paths.setdefault(items[1],[]).append(Path(items[1], items[0], int(items[2]))) #setdefault ensures that if the origin city is not in dictionary yet, initialize its value list before adding the path
-
+        finally:
+            input_file.close()
         return paths
     
     def expand(self, parent_node):
